@@ -7,20 +7,21 @@ use Symfony\Component\Process\Process;
 
 /**
  * ユーティリティファサード
+ * ディレクトリ、ファイル、シンボリックリンク操作の各機能を実装
  */
 class Utl {
 
   /**
    * 指定ディレクトリが存在しなければ再帰的に作成
    * @param string @path 作成するディレクトリのフルパス
-   * @param int $permission (デフォルト755)
-   * @return
+   * @param string $permission (デフォルト0755)
+   * @return File::makeDirectoryの戻り値　指定ディレクトリが既存の場合true
    */
-  public static function makeDir($path, $permisson=0755) {
+  public static function makeDir($path, $permisson='0755') {
 
     $ret = true;
     if (\File::missing($path)) {
-      $ret = \File::makeDirectory($path, 0755, true);
+      $ret = \File::makeDirectory($path, $permisson, true);
     }
     return $ret;
   }
@@ -31,10 +32,10 @@ class Utl {
    * ファイルが既存ならば一旦削除して再作成
    * @param string $path ファイルのフルパス
    * @param string $contents ファイルのコンテンツ
-   * @param int $permission ファイルのパーミッション(デフォルト755)
-   * @return
+   * @param string $permission ファイルのパーミッション(デフォルト0755)
+   * @return \File::put の戻り値
    */
-  public static function makeFile($path, $contents, $permisson=0755) {
+  public static function makeFile($path, $contents, $permisson='0755') {
 
     $ret = true;
     // ファイルが存在すれば削除
@@ -75,7 +76,7 @@ class Utl {
    * 既存ならば何もしない
    * @param string $source ソフトリンクのソース(フルパス)
    * @param string $target 作成するソフトリンク(フルパス)
-   * @return
+   * @return 成功時true 失敗時false
    */
   public static function makeSoftLink($source, $target) {
 
@@ -101,7 +102,7 @@ class Utl {
    * ソフトシンボリックリンクを解除する
    * リンクが無ければ何もしない
    * @param string $target 解除するソフトリンク(フルパス)
-   * @return
+   * @return 成功時true 失敗時false
    */
   public static function removeSoftLink($target) {
 
