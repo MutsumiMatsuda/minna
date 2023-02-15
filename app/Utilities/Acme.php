@@ -93,8 +93,9 @@ class Acme
       // ...
       throw new ProcessFailedException($process);
     }
-    */
     $results = shell_exec("sudo nginx -s reload");
+    */
+    $results = exec("sudo nginx -s reload");
     if ($results != "") {
       throw new AcmeFailedException("Nginxの再起動に失敗しました");
     }
